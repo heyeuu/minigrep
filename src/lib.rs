@@ -17,10 +17,38 @@ impl Config {
         Ok(Config { query, file_path })
     }
 
+    fn search<'a>(query: &'a str, contents: &'a str) -> Vec<&'a str> {
+        let mut results: Vec<&str> = Vec::new();
+
+        for line in contents.lines() {
+            if line.contains(query) {
+                results.push(line);
+            }
+        }
+        results
+    }
+
     pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-        let content = fs::read_to_string(config.file_path)?;
-        println!("with content:{content}");
+        let contents = fs::read_to_string(config.file_path)?;
+
+        for line in Self::search("heyeuuu", &contents) {
+            println!("{line}");
+        }
 
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn one_result() {
+        let query = "rust";
+        let contents = "/ hello world!
+rust
+        hahhh I'm readyyyyy";
+        assert_eq!(vec!["rust"], search(query, contents));
     }
 }
