@@ -17,7 +17,7 @@ impl Config {
         Ok(Config { query, file_path })
     }
 
-    fn search<'a>(query: &'a str, contents: &'a str) -> Vec<&'a str> {
+    pub fn search<'a>(query: &'a str, contents: &'a str) -> Vec<&'a str> {
         let mut results: Vec<&str> = Vec::new();
 
         for line in contents.lines() {
@@ -49,6 +49,6 @@ mod tests {
         let contents = "/ hello world!
 rust
         hahhh I'm readyyyyy";
-        assert_eq!(vec!["rust"], search(query, contents));
+        assert_eq!(vec!["rust"], Config::search(query, contents));
     }
 }
